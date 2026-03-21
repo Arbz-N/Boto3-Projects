@@ -79,7 +79,7 @@
     aws sts get-caller-identity
     # Account ID + ARN 
 
-Run the Script:
+### Run the Script:
 
     python3 s3_manager.py
 
@@ -107,9 +107,8 @@ Expected Output
   Deleted object: test/boto3-test.txt
   Bucket deleted: boto3-lab-a1b2c3d4
 
-==================================================
   Lab complete! 
-==================================================
+
 
 ### Code Walkthrough
 
