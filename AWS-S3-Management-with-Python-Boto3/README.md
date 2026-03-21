@@ -1,4 +1,4 @@
-AWS S3 Management with Python Boto3
+# AWS S3 Management with Python Boto3
 
     Overview
     This is a hands-on project that demonstrates AWS S3 management using Boto3 — the official AWS SDK for Python. 
@@ -13,7 +13,7 @@ AWS S3 Management with Python Boto3
     Cleanup covered both locally (venv, files) and on AWS (leftover buckets)
 
 
-Project Structure
+Project Structure:
 
     AWS-S3-Management-with-Python-Boto3/
     │
@@ -31,7 +31,7 @@ Project Structure
     AWS CLI                aws --version
     AWS credentials        aws sts get-caller-identity
 
-Architecture
+Architecture:
     
     Python Script (s3_manager.py)
            │
@@ -48,7 +48,7 @@ Architecture
       Bucket name: boto3-lab-{uuid4[:8]}  ← unique every run
 
 Setup
-Step 1 — Virtual Environment
+Step 1 — Virtual Environment:
 
     Create and activate venv
     python3 -m venv boto3-lab
@@ -66,7 +66,7 @@ Step 1 — Virtual Environment
     # boto3  1.xx.x 
 
 
-Step 2 — AWS Configure
+Step 2 — AWS Configure:
 
     aws configure
     # AWS Access Key ID     : AKIA...
@@ -78,7 +78,7 @@ Step 2 — AWS Configure
     aws sts get-caller-identity
     # Account ID + ARN 
 
-Run the Script
+Run the Script:
 
     python3 s3_manager.py
 
@@ -139,7 +139,7 @@ Code Walkthrough
         s3.delete_object(Bucket=bucket_name, Key=obj['Key'])
     s3.delete_bucket(Bucket=bucket_name)
 
-Cleanup
+Cleanup:
 
     bash# Deactivate venv
     deactivate
@@ -154,6 +154,6 @@ Cleanup
     # Force delete if any remain
     aws s3 rb s3://boto3-lab-XXXXXXXX --force
 
-License
+License:
 
     This project is licensed under the MIT License.
