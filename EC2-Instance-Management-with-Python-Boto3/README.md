@@ -129,3 +129,29 @@ Expected Output
     ==================================================
       Lab complete! 
     ==================================================
+
+Cleanup
+
+    Deactivate venv
+    deactivate
+    rm -rf boto3-lab/
+    
+    # If instance still running (script interrupted):
+    aws ec2 describe-instances \
+      --filters "Name=tag:Name,Values=boto3-lab-server" \
+                "Name=instance-state-name,Values=running" \
+      --query 'Reservations[*].Instances[*].InstanceId' \
+      --output text
+    
+    aws ec2 terminate-instances --instance-ids i-xxxxxxxxxxxxxxxxx
+    
+    # If snapshot still exists:
+    aws ec2 describe-snapshots \
+      --filters "Name=description,Values=Snapshot*boto3*" \
+      --query 'Snapshots[*].SnapshotId' --output text
+    
+    aws ec2 delete-snapshot --snapshot-id snap-xxxxxxxxxxxxxxxxx
+    
+License
+
+    This project is licensed under the MIT License.
