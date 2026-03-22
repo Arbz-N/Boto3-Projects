@@ -1,4 +1,4 @@
-EC2 Instance Management with Python Boto3
+# EC2 Instance Management with Python Boto3
 
     Overview
     This is a hands-on project that demonstrates full EC2 lifecycle management using Boto3 — 
@@ -14,7 +14,7 @@ EC2 Instance Management with Python Boto3
     Full lifecycle in one script: create → wait → snapshot → terminate
 
 
-Project Structure
+## Project Structure:
  
     EC2-Instance-Management-with-Python-Boto3/
     │
@@ -35,7 +35,7 @@ Project Structure
     Subnet ID              Any subnet in your VPC
 
 
-Configuration
+## Configuration:
 
     Before running, update the config section at the top of ec2_manager.py:
     
@@ -45,7 +45,7 @@ Configuration
     KEY_NAME            = "your-key-pair"           # ← your key pair name
     SUBNET_ID           = "subnet-xxxxxxxxxx"       # ← your subnet ID
     
-Architecture
+## Architecture:
 
         ec2_manager.py
           │
@@ -72,8 +72,9 @@ Architecture
   boto3.client    → waiters, snapshots, terminate
 
 
-Setup
-Create and activate virtual environment
+## Setup
+
+### Create and activate virtual environment:
     
     python3 -m venv boto3-lab
     source boto3-lab/bin/activate
@@ -83,7 +84,7 @@ Create and activate virtual environment
     pip list | grep boto3  # boto3  1.xx.x 
 
 
-Update Config in ec2_manager.py
+### Update Config in ec2_manager.py:
 
     REGION        = "us-east-1"         # your region
     AMI_ID        = "ami-0b6c6ebed2801a5cb"  # Ubuntu 22.04
@@ -91,11 +92,11 @@ Update Config in ec2_manager.py
     KEY_NAME      = "your-key-pair"     # your key pair name
     SUBNET_ID     = "subnet-xxxxxxxx"   # your subnet ID
 
-Run
+### Run:
 
     python3 ec2_manager.py
 
-Expected Output
+### Expected Output:
 
     ==================================================
       EC2 Manager — Boto3 Lab
@@ -130,7 +131,7 @@ Expected Output
       Lab complete! 
     ==================================================
 
-Cleanup
+### Cleanup:
 
     Deactivate venv
     deactivate
@@ -152,6 +153,6 @@ Cleanup
     
     aws ec2 delete-snapshot --snapshot-id snap-xxxxxxxxxxxxxxxxx
     
-License
+### License:
 
     This project is licensed under the MIT License.
