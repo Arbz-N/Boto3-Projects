@@ -47,27 +47,85 @@ Configuration
     
 Architecture
 
-ec2_manager.py
-  │
-  ├── create_instance()
-  │     boto3.resource.create_instances()
-  │     → EC2 instance (t2.micro, Ubuntu 22.04)
-  │     → Tag: Name=boto3-lab-server
-  │
-  ├── monitor_instance()
-  │     waiter: instance_running
-  │     → instance.public_ip_address
-  │
-  ├── take_snapshot()
-  │     describe_instances → root VolumeId
-  │     create_snapshot(VolumeId)
-  │     → snap-xxxxxxxxxxxxxxxxx
-  │
-  └── terminate_instance()
-        terminate_instances()
-        waiter: instance_terminated
-        → instance gone 
+        ec2_manager.py
+          │
+          ├── create_instance()
+          │     boto3.resource.create_instances()
+          │     → EC2 instance (t2.micro, Ubuntu 22.04)
+          │     → Tag: Name=boto3-lab-server
+          │
+          ├── monitor_instance()
+          │     waiter: instance_running
+          │     → instance.public_ip_address
+          │
+          ├── take_snapshot()
+          │     describe_instances → root VolumeId
+          │     create_snapshot(VolumeId)
+          │     → snap-xxxxxxxxxxxxxxxxx
+          │
+          └── terminate_instance()
+                terminate_instances()
+                waiter: instance_terminated
+                → instance gone 
 
   boto3.resource  → create_instances(), Instance()
   boto3.client    → waiters, snapshots, terminate
 
+
+Setup
+Create and activate virtual environment
+    
+    python3 -m venv boto3-lab
+    source boto3-lab/bin/activate
+    
+    # Install dependencies
+    pip install -r requirements.txt
+    pip list | grep boto3  # boto3  1.xx.x 
+
+
+Update Config in ec2_manager.py
+
+    REGION        = "us-east-1"         # your region
+    AMI_ID        = "ami-0b6c6ebed2801a5cb"  # Ubuntu 22.04
+    INSTANCE_TYPE = "t2.micro"
+    KEY_NAME      = "your-key-pair"     # your key pair name
+    SUBNET_ID     = "subnet-xxxxxxxx"   # your subnet ID
+
+Run
+
+    python3 ec2_manager.py
+
+Expected Output
+
+    ==================================================
+      EC2 Manager — Boto3 Lab
+    ==================================================
+    
+    [1] Creating instance...
+      Created: i-0abc1234567890def (boto3-lab-server)
+    
+    [2] Monitoring state...
+      Waiting for running state...
+      Running! Public IP: 54.x.x.x
+    
+    [3] Taking snapshot...
+      Snapshot created: snap-0abc1234567890def
+    
+    ==================================================
+      Instance ID : i-0abc1234567890def
+      Snapshot ID : snap-0abc1234567890def
+      Public IP   : 54.x.x.x
+    ==================================================
+    
+    [4] Terminating instance...
+      Terminating...
+      Terminated!
+    
+    [5] Deleting snapshot...
+      Waiting for snapshot to complete...
+      Snapshot completed!
+      Snapshot deleted: snap-0abc1234567890def
+    
+    ==================================================
+      Lab complete! 
+    ==================================================
