@@ -4,13 +4,13 @@ import datetime
 from botocore.exceptions import ClientError
 
 # ─────────────────────────────────────────────
-# CONFIG
+# CONFIG — apni values yahan set karo
 # ─────────────────────────────────────────────
 REGION        = "us-east-1"
-AMI_ID        = "ami-0c7217cdde317cfec"
+AMI_ID        = "ami-XXXXXXXXXXXXXXXXX"    #
 INSTANCE_TYPE = "t2.micro"
-KEY_NAME      = "your-key-pair"
-SUBNET_ID     = "subnet-xxxxxxxxxx"
+KEY_NAME      = "your-key-pair"            #
+SUBNET_ID     = "subnet-XXXXXXXXXXXXXXXXX" #
 
 
 def create_instance(name):
@@ -29,7 +29,7 @@ def create_instance(name):
             }]
         )
         iid = instances[0].id
-        print(f"  Created: {iid} ({name})")
+        print(f"  [OK] Created: {iid} ({name})")
         return iid
     except ClientError as e:
         print(f"  Error: {e.response['Error']['Message']}")
@@ -39,14 +39,12 @@ def create_instance(name):
 def monitor_instance(instance_id):
     ec2_client   = boto3.client("ec2", region_name=REGION)
     ec2_resource = boto3.resource("ec2", region_name=REGION)
-
     print(f"  Waiting for running state...")
     waiter = ec2_client.get_waiter('instance_running')
     waiter.wait(InstanceIds=[instance_id])
-
     instance = ec2_resource.Instance(instance_id)
     instance.reload()
-    print(f"  Running! Public IP: {instance.public_ip_address}")
+    print(f"  [OK] Running! Public IP: {instance.public_ip_address}")
     return instance
 
 
@@ -56,12 +54,11 @@ def take_snapshot(instance_id):
         r = ec2_client.describe_instances(InstanceIds=[instance_id])
         vol = r['Reservations'][0]['Instances'][0] \
                 ['BlockDeviceMappings'][0]['Ebs']['VolumeId']
-
         snap = ec2_client.create_snapshot(
             VolumeId=vol,
             Description=f"Snapshot {instance_id} {datetime.datetime.now()}"
         )
-        print(f"  Snapshot created: {snap['SnapshotId']}")
+        print(f"  [OK] Snapshot created: {snap['SnapshotId']}")
         return snap['SnapshotId']
     except ClientError as e:
         print(f"  Error: {e.response['Error']['Message']}")
@@ -71,11 +68,24 @@ def take_snapshot(instance_id):
 def terminate_instance(instance_id):
     ec2_client = boto3.client("ec2", region_name=REGION)
     ec2_client.terminate_instances(InstanceIds=[instance_id])
-
     print(f"  Terminating...")
     waiter = ec2_client.get_waiter('instance_terminated')
     waiter.wait(InstanceIds=[instance_id])
-    print(f"  Terminated!")
+    print(f"  [OK] Terminated!")
+
+
+def delete_snapshot(snapshot_id):
+    ec2_client   = boto3.client("ec2", region_name=REGION)
+    ec2_resource = boto3.resource("ec2", region_name=REGION)
+    try:
+        snapshot = ec2_resource.Snapshot(snapshot_id)
+        print("  Waiting for snapshot to complete...")
+        snapshot.wait_until_completed()
+        print("  Snapshot completed!")
+        ec2_client.delete_snapshot(SnapshotId=snapshot_id, DryRun=False)
+        print(f"  [OK] Snapshot deleted: {snapshot_id}")
+    except ClientError as e:
+        print(f"  Error: {e.response['Error']['Message']}")
 
 
 # ─────────────────────────────────────────────
@@ -86,17 +96,17 @@ if __name__ == "__main__":
     print("  EC2 Manager — Boto3 Lab")
     print("=" * 50)
 
-    # Step 1: Create
+    # Step 1: Create instance
     print("\n[1] Creating instance...")
     iid = create_instance("boto3-lab-server")
     if not iid:
         sys.exit(1)
 
-    # Step 2: Monitor
+    # Step 2: Monitor until running
     print("\n[2] Monitoring state...")
     instance = monitor_instance(iid)
 
-    # Step 3: Snapshot
+    # Step 3: Take EBS snapshot
     print("\n[3] Taking snapshot...")
     snap_id = take_snapshot(iid)
 
@@ -108,7 +118,15 @@ if __name__ == "__main__":
         print(f"  Public IP   : {instance.public_ip_address}")
     print("=" * 50)
 
-    # Step 5: Cleanup
+    # Step 5: Terminate instance
     print("\n[4] Terminating instance...")
     terminate_instance(iid)
-    print("\n  Lab complete!")
+
+    # Step 6: Delete snapshot
+    if snap_id:
+        print("\n[5] Deleting snapshot...")
+        delete_snapshot(snap_id)
+
+    print("\n" + "=" * 50)
+    print("  Lab complete!")
+    print("=" * 50)
