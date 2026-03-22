@@ -7,10 +7,10 @@ from botocore.exceptions import ClientError
 # CONFIG — apni values yahan set karo
 # ─────────────────────────────────────────────
 REGION        = "us-east-1"
-AMI_ID        = "ami-XXXXXXXXXXXXXXXXX"    #
+AMI_ID        = "ami-XXXXXXXXXXXXXXXXX"
 INSTANCE_TYPE = "t2.micro"
-KEY_NAME      = "your-key-pair"            #
-SUBNET_ID     = "subnet-XXXXXXXXXXXXXXXXX" #
+KEY_NAME      = "your-key-pair"
+SUBNET_ID     = "subnet-XXXXXXXXXXXXXXXXX"
 
 
 def create_instance(name):
