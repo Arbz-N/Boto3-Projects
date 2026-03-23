@@ -1,6 +1,6 @@
 # Web Scraping → DynamoDB with Python Boto3:
 
-Overview
+## Overview:
 
     This is a hands-on project that builds a complete data pipeline in a single Python script: 
     scrape mobile phone listings from whatmobile.com.pk, clean the data, and store it in AWS DynamoDB.
@@ -14,7 +14,7 @@ Overview
     ResourceInUseException handled gracefully — reuses existing table
     Full scrape → process → store pipeline in one python3 pipeline.py run
 
-Project Structure:
+## Project Structure:
 
     Web-Scraping-DynamoDB-with-Python-Boto3/
     │
@@ -23,7 +23,7 @@ Project Structure:
     │
     └── README.md
 
-Prerequisites:
+## Prerequisites:
 
     Requirement               Check
     
@@ -31,7 +31,7 @@ Prerequisites:
     AWS CLI                   aws sts get-caller-identity
     AWS credentials           IAM user with DynamoDB permissions
 
-Architecture:
+## Architecture:
  
         whatmobile.com.pk
                │
@@ -60,8 +60,9 @@ Architecture:
           │ .. │ ...                │ ...          │
           └────┴────────────────────┴──────────────┘
 
-Setup
-Create and activate virtual environment:
+## Setup
+
+### Create and activate virtual environment:
 
     python3 -m venv scrape-env
     source scrape-env/bin/activate
@@ -75,11 +76,11 @@ Create and activate virtual environment:
     # AWS credentials check
     aws sts get-caller-identity  # 
 
-Run:
+### Run:
 
     python3 pipeline.py
 
-Expected Output:
+### Expected Output:
 
     ==================================================
       Web Scraping → DynamoDB Pipeline
@@ -98,7 +99,7 @@ Expected Output:
     ==================================================
 
 
-Code Concepts:
+### Code Concepts:
 
     Scraping with User-Agent Header
     headers = {'User-Agent': 'Chrome/58.0.3029.110'}
@@ -129,7 +130,7 @@ Code Concepts:
       --query 'Items[*].{ID:ID.N,Name:Name.S,Price:Price.S}' \
       --output table
 
-Cleanup:
+### Cleanup:
 
     Delete DynamoDB table
     aws dynamodb delete-table \
@@ -143,6 +144,6 @@ Cleanup:
     rm -rf scrape-env/
 
 
-License:
+### License:
 
     This project is licensed under the MIT License.
