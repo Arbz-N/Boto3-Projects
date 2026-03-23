@@ -61,7 +61,7 @@ Architecture:
           └────┴────────────────────┴──────────────┘
 
 Setup
-Create and activate virtual environment
+Create and activate virtual environment:
 
     python3 -m venv scrape-env
     source scrape-env/bin/activate
@@ -75,11 +75,11 @@ Create and activate virtual environment
     # AWS credentials check
     aws sts get-caller-identity  # 
 
-Run
+Run:
 
     python3 pipeline.py
 
-Expected Output
+Expected Output:
 
     ==================================================
       Web Scraping → DynamoDB Pipeline
@@ -129,17 +129,20 @@ Code Concepts:
       --query 'Items[*].{ID:ID.N,Name:Name.S,Price:Price.S}' \
       --output table
 
-Cleanup
-bash# Delete DynamoDB table
-aws dynamodb delete-table \
-  --table-name My-Table \
-  --region us-east-1
+Cleanup:
 
-echo "DynamoDB table deleted "
+    Delete DynamoDB table
+    aws dynamodb delete-table \
+      --table-name My-Table \
+      --region us-east-1
+    
+    echo "DynamoDB table deleted "
+    
+    # Deactivate venv
+    deactivate
+    rm -rf scrape-env/
 
-# Deactivate venv
-deactivate
-rm -rf scrape-env/
 
-📄 License
-This project is licensed under the MIT License.
+License:
+
+    This project is licensed under the MIT License.
