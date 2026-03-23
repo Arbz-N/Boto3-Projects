@@ -14,7 +14,7 @@ Overview
     ResourceInUseException handled gracefully — reuses existing table
     Full scrape → process → store pipeline in one python3 pipeline.py run
 
-Project Structure
+Project Structure:
 
     Web-Scraping-DynamoDB-with-Python-Boto3/
     │
@@ -23,7 +23,7 @@ Project Structure
     │
     └── README.md
 
-Prerequisites
+Prerequisites:
 
     Requirement               Check
     
@@ -31,7 +31,7 @@ Prerequisites
     AWS CLI                   aws sts get-caller-identity
     AWS credentials           IAM user with DynamoDB permissions
 
-Architecture
+Architecture:
  
         whatmobile.com.pk
                │
@@ -60,43 +60,45 @@ Architecture
           │ .. │ ...                │ ...          │
           └────┴────────────────────┴──────────────┘
 
- Setup
-bash# Create and activate virtual environment
-python3 -m venv scrape-env
-source scrape-env/bin/activate
+Setup
+Create and activate virtual environment
 
-# Install dependencies
-pip install -r requirements.txt
+    python3 -m venv scrape-env
+    source scrape-env/bin/activate
+    
+    # Install dependencies
+    pip install -r requirements.txt
+    
+    # Verify
+    pip show boto3 requests beautifulsoup4
+    
+    # AWS credentials check
+    aws sts get-caller-identity  # 
 
-# Verify
-pip show boto3 requests beautifulsoup4
+Run
 
-# AWS credentials check
-aws sts get-caller-identity  # 
-
- Run
-python3 pipeline.py
+    python3 pipeline.py
 
 Expected Output
 
-==================================================
-  Web Scraping → DynamoDB Pipeline
-==================================================
+    ==================================================
+      Web Scraping → DynamoDB Pipeline
+    ==================================================
+    
+    [1] Scraping website...
+      Scraping: https://www.whatmobile.com.pk/
+      Scraped 20 mobile listings 
+    
+    [2] Storing in DynamoDB...
+      Table 'My-Table' created and ready 
+      20 items stored in DynamoDB 
+    
+    ==================================================
+      Pipeline complete! 20 items in DynamoDB 
+    ==================================================
 
-[1] Scraping website...
-  Scraping: https://www.whatmobile.com.pk/
-  Scraped 20 mobile listings ✅
 
-[2] Storing in DynamoDB...
-  Table 'My-Table' created and ready ✅
-  20 items stored in DynamoDB ✅
-
-==================================================
-  Pipeline complete! 20 items in DynamoDB ✅
-==================================================
-
-
-Code Concepts
+Code Concepts:
 
     Scraping with User-Agent Header
     headers = {'User-Agent': 'Chrome/58.0.3029.110'}
