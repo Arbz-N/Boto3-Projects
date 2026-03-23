@@ -1,0 +1,5 @@
+[
+    {"orderId": "oId-100", "customerId": "972", "transactionAmount": "50.00"},
+    {"orderId": "oId-101", "customerId": "985", "transactionAmount": "75.00"},
+    {"orderId": "oId-102", "customerId": "991", "transactionAmount": "30.00"}
+]
