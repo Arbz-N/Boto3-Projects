@@ -23,9 +23,6 @@ def lambda_handler(event, context):
                  event['Records'][0]['s3']['object']['key'],
                  encoding='utf-8'
              )
-    # unquote_plus is required because S3 encodes special characters
-    # "my+file.json" becomes "my file.json" after decoding
-    # Without decoding: s3.get_object(Key="my+file.json") → FileNotFound
 
     # Read the file content from S3
     response     = s3_client.get_object(Bucket=bucket, Key=key)
