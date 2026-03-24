@@ -1,4 +1,4 @@
-Serverless Order Processing Workflow
+# Serverless Order Processing Workflow:
 
     Overview
     This project demonstrates a serverless order processing pipeline using AWS Step Functions.
@@ -7,7 +7,7 @@ Serverless Order Processing Workflow
 
 
 
-Architecture:
+## Architecture:
 
     S3 Upload (test-order.json)
         |
@@ -24,7 +24,7 @@ Architecture:
         |-- State 2: Process Order   --> Lab5-ProcessOrderFunction (Lambda)
 
 
-Project Structure:
+## Project Structure:
 
         Serverless-Order-Processing-Workflow-With-AWS-Step-Functions/
         |
@@ -36,7 +36,7 @@ Project Structure:
         |
         |-- README.md
 
-Prerequisites
+## Prerequisites:
 
     # AWS configured?
     aws sts get-caller-identity
@@ -46,11 +46,11 @@ Prerequisites
     
     aws sts get-caller-identity --query 'Account' --output text
 
-Task 1 — Create S3 Bucket
+### Task 1 — Create S3 Bucket:
 
     aws s3 mb s3://lab5-order-json-bucket --region your-region
 
-Task 2 — Create IAM Role
+## Task 2 — Create IAM Role:
 
     AWS Console → IAM → Roles → Create role
 
@@ -63,7 +63,7 @@ Task 2 — Create IAM Role
             - AWSLambdaBasicExecutionRole
             - AWSStepFunctionFullAccess
 
-Task 3 — Create DynamoDB Table
+### Task 3 — Create DynamoDB Table:
 
     AWS Console → DynamoDB → Create table
     
@@ -72,7 +72,7 @@ Task 3 — Create DynamoDB Table
     Sort Key:      orderId     (String)
     The combination of customerId and orderId forms the composite primary key. Both fields are required to uniquely identify an item.
 
-Task 4 — Deploy Lambda Functions
+### Task 4 — Deploy Lambda Functions:
 
     Step-Triggering-Lambda
     AWS Console → Lambda → Create function
@@ -90,7 +90,7 @@ Task 4 — Deploy Lambda Functions
       Role:    Lambda-Role
     Paste the code from process_order_lambda.py.
 
-Task 5 — Configure S3 Event Trigger
+### Task 5 — Configure S3 Event Trigger:
 
     AWS Console → S3 → lab5-order-json-bucket
       → Properties → Event notifications → Create event notification
@@ -99,7 +99,7 @@ Task 5 — Configure S3 Event Trigger
       Event type:  All object create events
       Destination: Lambda function → Step-Triggering-Lambda
 
-Task 6 — Create State Machine
+### Task 6 — Create State Machine:
 
     AWS Console → Step Functions → Create state machine
       → Write your workflow in code
@@ -108,13 +108,13 @@ Task 6 — Create State Machine
     State Machine name: Lab5-OrderProcessingStateMachine
     Type:               Standard
 
-Task 7 — Update State Machine ARN in Lambda
+### Task 7 — Update State Machine ARN in Lambda:
 
     After creating the state machine, copy its ARN from the console and update the CONFIG in step_triggering_lambda.py:
     pythonREGION     = "your-actual-region"
     ACCOUNT_ID = "your-actual-account-id"
 
-Task 8 — Test with Single Order
+### Task 8 — Test with Single Order:
 
     Upload the test file to trigger the workflow
     aws s3 cp test-order.json s3://lab5-order-json-bucket/
@@ -128,13 +128,13 @@ Task 8 — Test with Single Order
       --key '{"customerId": {"S": "972"}, "orderId": {"S": "oId-100"}}' \
       --region your-region
 
-Task 9 — Test with Multiple Orders
+### Task 9 — Test with Multiple Orders:
 
     bash# Upload multiple orders file
     aws s3 cp multi-orders.json s3://lab5-order-json-bucket/
     Three separate Step Functions executions will start. Each order will be written to DynamoDB and processed by the Lambda function independently.
 
-Cleanup
+### Cleanup:
 
     aws s3 rm s3://lab5-order-json-bucket --recursive
     aws s3 rb s3://lab5-order-json-bucket
@@ -161,6 +161,6 @@ Cleanup
       --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
     aws iam delete-role --role-name Lambda-Role
 
-License
+### License:
 
     This project is licensed under the MIT License.
