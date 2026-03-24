@@ -1,39 +1,40 @@
 Serverless Order Processing Workflow
 
-Overview
-This project demonstrates a serverless order processing pipeline using AWS Step Functions.
-A JSON file uploaded to S3 triggers a Lambda function which starts a Step Functions execution. 
-The state machine writes the order to DynamoDB then calls a second Lambda to process it.
+    Overview
+    This project demonstrates a serverless order processing pipeline using AWS Step Functions.
+    A JSON file uploaded to S3 triggers a Lambda function which starts a Step Functions execution. 
+    The state machine writes the order to DynamoDB then calls a second Lambda to process it.
 
 
 
 Architecture:
-S3 Upload (test-order.json)
-    |
-    | Event Trigger
-    v
-Step-Triggering-Lambda
-    |
-    | start_execution()
-    v
-Step Functions State Machine (Lab5-OrderProcessingStateMachine)
-    |
-    |-- State 1: Add Order Entry --> DynamoDB putItem
-    |
-    |-- State 2: Process Order   --> Lab5-ProcessOrderFunction (Lambda)
+
+    S3 Upload (test-order.json)
+        |
+        | Event Trigger
+        v
+    Step-Triggering-Lambda
+        |
+        | start_execution()
+        v
+    Step Functions State Machine (Lab5-OrderProcessingStateMachine)
+        |
+        |-- State 1: Add Order Entry --> DynamoDB putItem
+        |
+        |-- State 2: Process Order   --> Lab5-ProcessOrderFunction (Lambda)
 
 
-Project Structure
+Project Structure:
 
-StepFunctionsLab/
-|
-|-- step_triggering_lambda.py       # S3 event -> Step Functions trigger
-|-- process_order_lambda.py         # Order processing Lambda
-|-- state_machine_definition.json   # Step Functions state machine JSON
-|-- test-order.json                 # Single order test file
-|-- multi-orders.json               # Multiple orders test file
-|
-|-- README.md
+        Serverless-Order-Processing-Workflow-With-AWS-Step-Functions/
+        |
+        |-- step_triggering_lambda.py       # S3 event -> Step Functions trigger
+        |-- process_order_lambda.py         # Order processing Lambda
+        |-- state_machine_definition.json   # Step Functions state machine JSON
+        |-- test-order.json                 # Single order test file
+        |-- multi-orders.json               # Multiple orders test file
+        |
+        |-- README.md
 
 Prerequisites
 
