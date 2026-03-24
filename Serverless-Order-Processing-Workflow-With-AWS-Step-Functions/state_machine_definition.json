@@ -1,0 +1,27 @@
+{
+    "Comment": "Order Processing Workflow",
+    "StartAt": "Add Order Entry",
+    "States": {
+        "Add Order Entry": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::dynamodb:putItem",
+            "Parameters": {
+                "TableName": "Lab5-CustomerOrdersTable",
+                "Item": {
+                    "customerId": {"S.$": "$.customerId"},
+                    "orderId":    {"S.$": "$.orderId"}
+                }
+            },
+            "ResultPath": null,
+            "Next": "Process Order"
+        },
+        "Process Order": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:YOUR-REGION:YOUR-ACCOUNT-ID:function:Lab5-ProcessOrderFunction",
+            "Parameters": {
+                "Payload.$": "$"
+            },
+            "End": true
+        }
+    }
+}
