@@ -1,6 +1,3 @@
-# multi-shard-consumer.py
-# Dono shards se ek saath padho
-
 import boto3
 import json
 import time
@@ -9,7 +6,6 @@ kinesis_client = boto3.client('kinesis', region_name='us-east-1')
 STREAM_NAME    = 'Ecommerce-Orders-Stream'
 
 def get_all_shard_iterators():
-    """Saare shards ke iterators nikalo"""
     response = kinesis_client.describe_stream(StreamName=STREAM_NAME)
     shards   = response['StreamDescription']['Shards']
 
@@ -27,7 +23,6 @@ def get_all_shard_iterators():
 
 def consume_all_shards():
     shard_iterators = get_all_shard_iterators()
-    # ↑ Sab shards ke iterators ek list mein
 
     print("Consuming from all shards...")
 
@@ -37,8 +32,6 @@ def consume_all_shards():
                 ShardIterator=iterator, Limit=10
             )
             shard_iterators[i] = records['NextShardIterator']
-            # ↑ Position update karo
-
             for record in records['Records']:
                 order = json.loads(record['Data'])
                 print(f"Shard {i} | {order['product_name']} | {order['customer_name']}")
