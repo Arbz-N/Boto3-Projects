@@ -1,4 +1,4 @@
-Real-Time E-Commerce Order Streaming with AWS Kinesis
+# Real-Time E-Commerce Order Streaming with AWS Kinesis:
 
     Overview
     This project demonstrates real-time data streaming using AWS Kinesis Data Streams.
@@ -6,9 +6,9 @@ Real-Time E-Commerce Order Streaming with AWS Kinesis
     Consumer scripts read the records in real time from one or all shards.
 
     producer.py
-    |
-    | put_record() x 100
-    v
+        |
+        | put_record() x 100
+        v
     Kinesis Data Stream (Ecommerce-Orders-Stream)
         |-- Shard 0
         |-- Shard 1
@@ -18,7 +18,7 @@ Real-Time E-Commerce Order Streaming with AWS Kinesis
     consumer.py / multi-shard-consumer.py
 
 
-Project Structure
+## Project Structure:
 
     KinesisLab/
     |
@@ -29,14 +29,14 @@ Project Structure
     |
     |-- README.md
 
-Prerequisites
+## Prerequisites:
 
     python3 --version
     pip install boto3
     aws sts get-caller-identity
 
 
-Task 1 — Create Kinesis Stream
+### Task 1 — Create Kinesis Stream:
 
     Console
     AWS Console → Kinesis → Create data stream
@@ -48,7 +48,7 @@ Task 1 — Create Kinesis Stream
     Wait for status to become Active (~1 minute)
 
 
-Task 2 — Run the Producer
+### Task 2 — Run the Producer:
 
     Update the CONFIG section in producer.py:
     pythonREGION = "your-region"
@@ -64,7 +64,7 @@ Task 2 — Run the Producer
     
     [OK] All 100 orders sent to Kinesis!
 
-Task 3 — Run the Consumer
+### Task 3 — Run the Consumer:
 
     Get Shard IDs
     aws kinesis describe-stream \
@@ -73,7 +73,7 @@ Task 3 — Run the Consumer
       --query 'StreamDescription.Shards[*].ShardId'
     # ["shardId-000000000000", "shardId-000000000001"]
 
-Update the CONFIG section in consumer.py:
+### Update the CONFIG section in consumer.py:
 
     REGION   = "your-region"
     SHARD_ID = "shardId-000000000000"
@@ -94,7 +94,7 @@ Update the CONFIG section in consumer.py:
     ORD-0003 | Sony WH-1000XM6               | Qty:3 | PKR  269,997 | Islamabad  | EasyPaisa
 
 
-Task 4 — Multi-Shard Consumer
+### Task 4 — Multi-Shard Consumer:
     
     Update the CONFIG in multi-shard-consumer.py:
     pythonREGION = "your-region"
@@ -102,7 +102,7 @@ Task 4 — Multi-Shard Consumer
     This consumer automatically discovers all shards and reads from each one in a round-robin loop.
 
 
-Key Concepts
+### Key Concepts:
 
     PartitionKey and Shards
     pythonPartitionKey=order['category']
@@ -110,21 +110,21 @@ Key Concepts
     Using category as the key means all Smartphone orders land on one shard, all Laptop orders on another, and so on. 
     This keeps related data together and makes shard-level analysis straightforward.
 
-Shard IteratorType
+### Shard IteratorType:
 
     Type            Behavior
     LATEST          Read only new records from this point forward
     TRIM_HORIZON    Read all records from the beginning of the shard
     AT_TIMESTAMP    Read records from a specific timestamp
 
-Why Update NextShardIterator
+### Why Update NextShardIterator:
 
     Each get_records call returns a NextShardIterator token. 
     If you do not update the iterator before the next call, you will re-read the same records in an infinite loop.
     Shard Capacity
     Each shard supports 1 MB/sec write and 2 MB/sec read. With 2 shards the stream can handle 2 MB/sec inbound and 4 MB/sec outbound.
 
-Cleanup
+### Cleanup:
 
     # Delete the Kinesis stream to stop billing
     aws kinesis delete-stream \
@@ -136,5 +136,4 @@ Cleanup
     
     # Remove local files
     rm -f producer.py consumer.py multi-shard-consumer.py products.py
-
 
