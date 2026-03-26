@@ -1,1 +1,0 @@
-# Stream Data Processing with Amazon Kinesis
