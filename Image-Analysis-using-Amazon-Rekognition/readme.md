@@ -1,4 +1,4 @@
- Image Analysis with Amazon Rekognition
+#  Image Analysis with Amazon Rekognition:
  
     Overview
     This project demonstrates an end-to-end image analysis pipeline using Amazon Rekognition. 
@@ -18,7 +18,7 @@
             v
     DynamoDB (Rekognition-Labels-Table)
 
-Project Structure
+## Project Structure:
 
     RekognitionLab/
     |
@@ -29,7 +29,7 @@ Project Structure
     |
     |-- README.md
 
-Prerequisites
+## Prerequisites:
 
     python3 --version
     pip install -r requirements.txt
@@ -37,7 +37,7 @@ Prerequisites
     aws configure
     aws sts get-caller-identity
 
-Task 2 — IAM Permissions
+### Task 1 — IAM Permissions:
     
     The IAM user or role running these scripts needs the following policies attached:
     AmazonS3FullAccess
@@ -45,7 +45,7 @@ Task 2 — IAM Permissions
     AmazonDynamoDBFullAccess
     For production environments, scope these down to the minimum required actions.
 
-Task 3 — Upload Images to S3
+### Task 2 — Upload Images to S3:
 
     Place your images in the ./images folder, then update the CONFIG in upload_images.py:
  
@@ -58,7 +58,7 @@ Task 3 — Upload Images to S3
     Uploaded: car.jpg
     Uploaded: landscape.png
 
-Task 4 — Run Rekognition Analysis
+### Task 3 — Run Rekognition Analysis:
 
     Update the CONFIG in analyze_images.py:
     
@@ -67,7 +67,7 @@ Task 4 — Run Rekognition Analysis
 
     python3 analyze_images.py
 
-Expected output:
+### Expected output:
 
     [OK] Table ready: Rekognition-Labels-Table
     
@@ -92,7 +92,7 @@ Expected output:
         MinConfidence=70    # only include labels with 70% or higher confidence
     )
 
-Cleanup
+### Cleanup:
 
     Remove all objects from the bucket then delete it
     aws s3 rm s3://your-bucket-name --recursive
@@ -103,6 +103,6 @@ Cleanup
       --table-name Rekognition-Labels-Table \
       --region your-region
 
-License
+### License:
 
     This project is licensed under the MIT License.
